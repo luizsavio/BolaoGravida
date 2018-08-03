@@ -31,7 +31,7 @@
             <img [src]= bolao.photoURL>
           </ion-avatar>
           <h2>{{ bolao.nomeGravida }}</h2>
-          <p>{{ bolao.dataNascimento ? 'Finalizado' : 'Em andamento' }}</p>
+          <p>Status: {{ bolao.dataNascimento ? 'Finalizado' : 'Em andamento' }}</p>
           <!-- implementar uma condiçao de usuario logado com o que ta gravado em participantes e adicionar no meusboloes: array participando  -->
           <ion-badge color="secondary" item-end *ngIf="bolao.participando">Participando</ion-badge>
         </ion-item>

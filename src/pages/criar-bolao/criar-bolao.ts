@@ -41,7 +41,7 @@ export class CriarBolaoPage {
     let data = this.criarForm.value;
     var dataAux = new Date(data.dataPrevista);
     var dataLimite = dataAux;
-    dataLimite.setDate(dataAux.getDate() - 30);
+    dataLimite.setDate(dataAux.getDate() - 15);
     this.dataLimiteAposta = dataLimite.toISOString();
     //this.dataLimiteAposta = dataAux;
 

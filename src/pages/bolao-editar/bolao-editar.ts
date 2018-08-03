@@ -91,6 +91,7 @@ export class BolaoEditarPage {
       }
       this.firestoreService.atualizarDocumento('bolao', this.bolao.idBolao, objEditado)
         .then(() => {
+          this.bolao.nomeGravida = objEditado.nomeGravida;
           console.log('só sucesso');
         },
       (error) => console.log(error));
