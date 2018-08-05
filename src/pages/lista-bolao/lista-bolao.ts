@@ -30,7 +30,7 @@ export class ListaBolaoPage {
   }
 
   criarBolao() {
-    this.navCtrl.push(CriarBolaoPage);
+    this.navCtrl.push(CriarBolaoPage.name);
   }
 
   carregarBoloes() {
@@ -58,19 +58,25 @@ export class ListaBolaoPage {
   }
 
   selecionaBolao(bolao) {
-    this.navCtrl.push(TabsbolaoPage, { bolaoSelecionando: bolao });
+    this.navCtrl.push(TabsbolaoPage.name, { bolaoSelecionando: bolao });
   }
 
   ionViewDidEnter() {
-    this.carregarBoloes();
+    if (this.authservice.authState == null) {
+      this.navCtrl.setRoot(LoginPage)
+    } else {
+      this.carregarBoloes();
+    }
   }
 
-  sair(){
+
+
+  sair() {
     this.authservice.signOut()
-    .then(
-      () => this.navCtrl.setRoot(LoginPage),
-      (error) => console.log(error)
-    );
+      .then(
+        () => this.navCtrl.setRoot(LoginPage),
+        (error) => console.log(error)
+      );
   }
 
   presentLoading(message) {

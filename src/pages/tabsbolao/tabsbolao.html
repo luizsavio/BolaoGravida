@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Bolão: {{ bolao.nomeGravida }}</ion-title>
+    <ion-title>Bolão: {{ bolao?.nomeGravida }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -11,7 +11,7 @@
   <ion-tabs>
     <ion-tab tabIcon="information-circle" tabTitle="Informações" [root]="tab1" [rootParams]="navParams.get('bolaoSelecionando')"></ion-tab>
     <ion-tab tabIcon="people" tabTitle="Participantes" [root]="tab2" [rootParams]="navParams.get('bolaoSelecionando')"></ion-tab>
-    <ion-tab tabIcon="hand" tabTitle="Palpite" [root]="tab3" [rootParams]="navParams.get('bolaoSelecionando')" *ngIf="bolao.participando"></ion-tab>
+    <ion-tab tabIcon="hand" tabTitle="Palpite" [root]="tab3" [rootParams]="navParams.get('bolaoSelecionando')" *ngIf="bolao?.participando"></ion-tab>
     <ion-tab tabIcon="create" tabTitle="Editar" [root]="tab4" [rootParams]="navParams.get('bolaoSelecionando')" *ngIf="criador"></ion-tab>
   </ion-tabs>
 </ion-content>

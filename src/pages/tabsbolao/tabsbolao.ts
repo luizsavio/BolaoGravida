@@ -5,6 +5,7 @@ import { BolaoParticipantesPage } from '../bolao-participantes/bolao-participant
 import { BolaoPalpitePage } from '../bolao-palpite/bolao-palpite';
 import { BolaoEditarPage } from '../bolao-editar/bolao-editar';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
+import { LoginPage } from '../login/login';
 
 /**
  * Generated class for the TabsbolaoPage page.
@@ -27,14 +28,22 @@ export class TabsbolaoPage {
   criador: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public authService: AuthServiceProvider) {
-    this.tab1 = BolaoInformacaoPage;
-    this.tab2 = BolaoParticipantesPage;
-    this.tab3 = BolaoPalpitePage;
-    this.tab4 = BolaoEditarPage;
-    this.bolao = navParams.get('bolaoSelecionando');
-    console.log('bolao selecionado tab', this.bolao);
-    (authService.currentUser.uid == this.bolao.idUsuarioBolaoCriado) ? this.criador = true : this.criador = false
+    if (this.authService.authState == null) {
+      this.navCtrl.setRoot(LoginPage)
+    } else {
+      this.tab1 = BolaoInformacaoPage;
+      this.tab2 = BolaoParticipantesPage;
+      this.tab3 = BolaoPalpitePage;
+      this.tab4 = BolaoEditarPage;
+      this.bolao = navParams.get('bolaoSelecionando');
+      console.log('bolao selecionado tab', this.bolao);
+      (authService.currentUser.uid == this.bolao.idUsuarioBolaoCriado) ? this.criador = true : this.criador = false
+    }
   }
 
-
+  ionViewDidEnter() {
+    if (this.authService.authState == null) {
+      this.navCtrl.setRoot(LoginPage);
+    }
+  }
 }

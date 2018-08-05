@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '../../../node_modules/@angul
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { FirestoreServiceProvider } from '../../providers/firestore-service/firestore-service';
 import { ListaBolaoPage } from '../lista-bolao/lista-bolao';
+import { LoginPage } from '../login/login';
 
 /**
  * Generated class for the CriarBolaoPage page.
@@ -34,7 +35,13 @@ export class CriarBolaoPage {
     this.criarForm = fb.group({
       nomeGravida: ['', Validators.compose([Validators.required])],
       dataPrevista: ['', Validators.compose([Validators.required])]
-    })
+    });
+  }
+
+  ionViewDidEnter() {
+    if (this.authService.authState == null){
+      this.navCtrl.setRoot(LoginPage)
+    }
   }
 
   criar() {
@@ -97,7 +104,7 @@ export class CriarBolaoPage {
         buttons: [{
           text: 'Fechar',
         handler: () => {
-          this.navCtrl.setRoot(ListaBolaoPage);
+          this.navCtrl.setRoot(ListaBolaoPage.name);
         }
       }
     ]

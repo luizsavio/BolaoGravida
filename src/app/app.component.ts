@@ -19,9 +19,9 @@ export class MyApp {
   rootPage: any = LoginPage;
 
   public paginas = [
-    { titulo: 'Bolões', component: ListaBolaoPage, icone: 'woman' },
-    { titulo: 'Perfil', component: PerfilPage, icone: 'person' },
-    { titulo: 'Criar Bolão', component: CriarBolaoPage, icone: 'add' },
+    { titulo: 'Bolões', component: ListaBolaoPage.name, icone: 'woman' },
+    { titulo: 'Perfil', component: PerfilPage.name, icone: 'person' },
+    { titulo: 'Criar Bolão', component: CriarBolaoPage.name, icone: 'add' },
   ];
   
   constructor(platform: Platform, 

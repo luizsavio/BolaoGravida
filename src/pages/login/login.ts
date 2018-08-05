@@ -69,11 +69,17 @@ export class LoginPage {
     this.authService.signInWithEmailAndPassword(data.email, data.password)
     .then((data) => {
       console.log('Dados usuario Login login', data);
-      this.navCtrl.setRoot(ListaBolaoPage);
+      this.navCtrl.setRoot(ListaBolaoPage.name);
       
     },
     (error) => this.presentLoading(error.message)
     );
+  }
+
+  ionViewDidEnter() {
+    if (this.authService.authState != null){
+      this.navCtrl.setRoot(ListaBolaoPage.name)
+    }
   }
 
   signUp() {
@@ -138,7 +144,7 @@ export class LoginPage {
           } 
         });
         console.log("Dados usuario Google login", user);
-        this.navCtrl.setRoot(ListaBolaoPage);
+        this.navCtrl.setRoot(ListaBolaoPage.name);
       },
       error => console.log(error.message)
     );

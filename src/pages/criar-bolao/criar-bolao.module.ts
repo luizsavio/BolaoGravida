@@ -9,5 +9,8 @@ import { CriarBolaoPage } from './criar-bolao';
   imports: [
     IonicPageModule.forChild(CriarBolaoPage),
   ],
+  exports:[
+    CriarBolaoPage
+  ]
 })
 export class CriarBolaoPageModule {}

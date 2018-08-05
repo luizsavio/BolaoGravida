@@ -5,7 +5,6 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 //import { AngularFireModule } from 'angularfire2';
 //import { FIREBASE_CONFIG } from './firebase.credentials';
@@ -13,10 +12,6 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AuthServiceProvider } from '../providers/auth-service/auth-service';
 import { FirestoreServiceProvider } from '../providers/firestore-service/firestore-service';
-import { ListaBolaoPage } from '../pages/lista-bolao/lista-bolao';
-import { CriarBolaoPage } from '../pages/criar-bolao/criar-bolao';
-import { PerfilPage } from '../pages/perfil/perfil';
-import { TabsbolaoPage } from '../pages/tabsbolao/tabsbolao';
 import { BolaoEditarPage } from '../pages/bolao-editar/bolao-editar';
 import { BolaoPalpitePage } from '../pages/bolao-palpite/bolao-palpite';
 import { BolaoInformacaoPage } from '../pages/bolao-informacao/bolao-informacao';
@@ -30,12 +25,11 @@ import { BolaoParticipantesPage } from '../pages/bolao-participantes/bolao-parti
 @NgModule({
   declarations: [
     MyApp,
-    HomePage,
     LoginPage,
-    ListaBolaoPage,
+    /*ListaBolaoPage,
     CriarBolaoPage,
     PerfilPage,
-    TabsbolaoPage,
+    TabsbolaoPage,*/
     BolaoEditarPage,
     BolaoPalpitePage,
     BolaoInformacaoPage,
@@ -60,12 +54,11 @@ import { BolaoParticipantesPage } from '../pages/bolao-participantes/bolao-parti
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage,
     LoginPage,
-    ListaBolaoPage,
+    /*ListaBolaoPage,
     CriarBolaoPage,
     PerfilPage,
-    TabsbolaoPage,
+    TabsbolaoPage,*/
     BolaoEditarPage,
     BolaoPalpitePage,
     BolaoInformacaoPage,

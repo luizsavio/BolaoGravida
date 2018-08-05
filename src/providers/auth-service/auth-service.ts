@@ -36,15 +36,15 @@ export class AuthServiceProvider {
 
   }
 
-  updateProfileName(name: string){
+  updateProfileName(name: string) {
     var user = this.currentUser;
-        user.updateProfile({
-          displayName: name
-        }).then(function() {
-          console.log("Nome adicionado")
-        }).catch(function(error) {
-          console.log("nome não foi alterado:", error)
-        });
+    user.updateProfile({
+      displayName: name
+    }).then(function () {
+      console.log("Nome adicionado")
+    }).catch(function (error) {
+      console.log("nome não foi alterado:", error)
+    });
   }
 
   signInWithEmailAndPassword(email: string, password: string) {
@@ -53,7 +53,7 @@ export class AuthServiceProvider {
         .then((auth) => {
           this.authState = auth;
           resolve(auth);
-          console.log('Dados do usuario login authservice:', auth); 
+          console.log('Dados do usuario login authservice:', auth);
         })
         .catch((error) => {
           reject(error);
@@ -65,23 +65,37 @@ export class AuthServiceProvider {
   signInWithGoogle(): any {
     var provider = new firebase.auth.GoogleAuthProvider();
     return new Promise((resolve, reject) => {
-      auth.signInWithPopup(provider).then((result) => {
-        var user = result.user;
-        this.authState = user;
-        resolve(user);
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
-        // The signed-in user info.
-        console.log("Dados do token:", token);
-        console.log("Dados do usuario Google authservice:", user);
-      }).catch((error) => {
-        reject(error);
-      });
+      if (!(<any>window).cordova) {
+        auth.signInWithPopup(provider).then((result) => {
+          var user = result.user;
+          this.authState = user;
+          resolve(user);
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+          console.log("Dados do token:", token);
+          console.log("Dados do usuario Google authservice:", user);
+        }).catch((error) => {
+          reject(error.message);
+        });
+      } else {
+        auth.signInWithRedirect(provider);
+        auth.getRedirectResult().then((result) => {
+          if (result) {
+            var user = result.user;
+            this.authState = user;
+            resolve(user);
+            // This gives you a Google Access Token. You can use it to access the Google API.
+          }
+        }).catch((error) => {
+          reject(error.message);
+        });
+      }
     });
 
   }
 
-  resetPasswordEmail(email: string){
+  resetPasswordEmail(email: string) {
     return new Promise((resolve, reject) => {
       auth.sendPasswordResetEmail(email).then(() => {
         resolve();
@@ -91,7 +105,7 @@ export class AuthServiceProvider {
     })
   }
 
-  signOut(){
+  signOut() {
     return new Promise((resolve, reject) => {
       auth.signOut().then(
         () => {
@@ -101,15 +115,15 @@ export class AuthServiceProvider {
         (error) => reject(error.message)
       )
     });
-    
+
   }
 
   get currentUser(): any {
     return (this.authState !== null) ? this.authState : null;
   }
 
-  onAuthStateChanged(): any{
-    auth.onAuthStateChanged(function(user) {
+  onAuthStateChanged(): any {
+    auth.onAuthStateChanged(function (user) {
       if (user) {
         // User is signed in.
         this.authState = user

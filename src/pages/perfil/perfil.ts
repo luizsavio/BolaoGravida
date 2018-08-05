@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
+import { LoginPage } from '../login/login';
 
 /**
  * Generated class for the PerfilPage page.
@@ -35,6 +36,12 @@ export class PerfilPage {
       return (this.authService.authState.photoURL != null) ? this.authService.authState.photoURL : 'assets/img/avatar-padrao.jpg';
     }
 
+  }
+
+  ionViewDidEnter() {
+    if (this.authService.authState == null) {
+      this.navCtrl.setRoot(LoginPage)
+    }
   }
 
   get UsuarioLogado() {

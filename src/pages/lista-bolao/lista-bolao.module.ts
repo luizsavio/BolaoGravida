@@ -9,5 +9,8 @@ import { ListaBolaoPage } from './lista-bolao';
   imports: [
     IonicPageModule.forChild(ListaBolaoPage),
   ],
+  exports: [
+    ListaBolaoPage
+  ]
 })
 export class ListaBolaoPageModule {}
