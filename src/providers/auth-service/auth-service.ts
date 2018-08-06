@@ -78,15 +78,12 @@ export class AuthServiceProvider {
         }).catch((error) => {
           reject(error.message);
         });
-      } else {
+      } else { // não ta funcionando no compilado
         auth.signInWithRedirect(provider);
         auth.getRedirectResult().then((result) => {
-          if (result) {
             var user = result.user;
             this.authState = user;
             resolve(user);
-            // This gives you a Google Access Token. You can use it to access the Google API.
-          }
         }).catch((error) => {
           reject(error.message);
         });
@@ -123,7 +120,7 @@ export class AuthServiceProvider {
   }
 
   onAuthStateChanged(): any {
-    auth.onAuthStateChanged(function (user) {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         // User is signed in.
         this.authState = user
