@@ -41,9 +41,9 @@ export class TabsbolaoPage {
     }
   }
 
-  ionViewDidEnter() {
+  /*ionViewDidEnter() {
     if (this.authService.authState == null) {
       this.navCtrl.setRoot(LoginPage);
     }
-  }
+  }*/
 }

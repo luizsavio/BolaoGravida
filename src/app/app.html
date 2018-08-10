@@ -18,6 +18,11 @@
                     <ion-icon [name]="pagina.icone" item-left></ion-icon>
                     {{ pagina.titulo }}
                 </button>
+                <button ion-item menuClose [disabled]="UsuarioLogado.uid != 'l6jl4ij2xrdnC80Q7oSY1JCeQMG2' && UsuarioLogado.uid != 'UwZ4TO9vMJaaj69E4PYKHP4mAbG3' ? true : false"
+                (click)="criabolao()">
+                    <ion-icon name="add" item-left></ion-icon>
+                    Criar Bolão
+                </button>
             </ion-list>
         </ion-content>
     </ion-menu>

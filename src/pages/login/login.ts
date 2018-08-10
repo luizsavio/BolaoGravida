@@ -4,6 +4,7 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ListaBolaoPage } from '../lista-bolao/lista-bolao';
 import { FirestoreServiceProvider } from '../../providers/firestore-service/firestore-service';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the LoginPage page.
@@ -33,6 +34,7 @@ export class LoginPage {
     public navCtrl: NavController,
     public authService: AuthServiceProvider,
     public firestoreService: FirestoreServiceProvider,
+    public storage: Storage,
     fb: FormBuilder
   ) {
     this.loginForm = fb.group({
@@ -55,7 +57,7 @@ export class LoginPage {
     
     
   }
-
+ 
   // Slider methods
   @ViewChild('slider') slider: Slides;
   @ViewChild('innerSlider') innerSlider: Slides;
@@ -73,13 +75,18 @@ export class LoginPage {
       
     },
     (error) => this.presentLoading(error.message)
-    );
+    ); 
   }
 
   ionViewDidEnter() {
-    if (this.authService.authState != null){
-      this.navCtrl.setRoot(ListaBolaoPage.name)
-    }
+    this.storage.get("firebase:authUser:AIzaSyDaab2ETWq1XDiDyQkFZp-wk_T7BDGHUPw:[DEFAULT]")
+      .then((resultado) => {
+        console.log('promise', resultado)
+        if (resultado != null){
+          this.authService.authState = resultado.value;
+          this.navCtrl.setRoot(ListaBolaoPage.name);
+        }
+      });
   }
 
   signUp() {

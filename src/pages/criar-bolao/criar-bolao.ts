@@ -77,6 +77,7 @@ export class CriarBolaoPage {
               .then(() => {
                 console.log('bolaoparticipantes adicionado com sucesso.');
                 this.presentLoading('Bolão criado com sucesso!');
+                this.navCtrl.setRoot(ListaBolaoPage.name);
                 return;
               },
                 () => {
@@ -102,12 +103,8 @@ export class CriarBolaoPage {
         title: 'Alerta',
         subTitle: message,
         buttons: [{
-          text: 'Fechar',
-        handler: () => {
-          this.navCtrl.setRoot(ListaBolaoPage.name);
-        }
-      }
-    ]
+          text: 'Fechar'
+      }]
       });
       alert.present();
     });

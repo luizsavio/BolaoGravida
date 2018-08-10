@@ -25,9 +25,13 @@
       <ion-icon name="at" item-left></ion-icon>
       <p>Email: {{ UsuarioLogado?.email }}</p>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="UsuarioLogado?.metadata != null">
       <ion-icon name="calendar" item-left></ion-icon>
-      <p>Data de Criação: {{ UsuarioLogado?.metadata.creationTime | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
+      <p>Data de Criação: {{ UsuarioLogado?.metadata?.creationTime | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
+    </ion-item>
+    <ion-item *ngIf="UsuarioLogado?.createdAt != null">
+      <ion-icon name="calendar" item-left></ion-icon>
+      <p>Data de Criação: {{ UsuarioLogado?.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}</p>
     </ion-item>
     <ion-item>
       <ion-icon name="at" item-left></ion-icon>

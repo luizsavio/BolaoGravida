@@ -3,6 +3,7 @@
                 <ion-list-header>Informações:</ion-list-header>
                 </ion-list>
                 <p>Nome da Grávida: {{ bolao.nomeGravida }}</p>
+                <p>Administrador: {{ bolao.criador.nomeUsuario }}</p>
                 <p>Data Prevista Nascimento: {{ bolao.dataPrevistaNascimento | date: 'dd/MM/yyyy' }}</p>
                 <p>Data do nascimento do bebê: {{ !bolao.dataNascimento ? 'Bolão não foi finalizado ainda!': bolao.dataNascimento | date: 'dd/MM/yyyy' }}</p>
                 <p>Data limite da aposta: {{ bolao.dataLimiteAposta | date: 'dd/MM/yyyy' }}</p>

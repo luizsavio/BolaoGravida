@@ -14,7 +14,6 @@ export class AuthServiceProvider {
   authState: any = null;
 
   constructor() {
-
   }
 
   createUserWithEmailAndPassword(name: string, email: string, password: string): any {
@@ -124,6 +123,7 @@ export class AuthServiceProvider {
       if (user) {
         // User is signed in.
         this.authState = user
+        console.log('autenticado');
         // ...
       } else {
         this.authState = null;

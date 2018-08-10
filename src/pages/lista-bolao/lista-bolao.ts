@@ -48,7 +48,12 @@ export class ListaBolaoPage {
                       itembolao['participando'] = true;
                     }
                   }
+                  this.fireservice.receberUmDocumento('usuario', itembolao.idUsuarioBolaoCriado)
+                .then((obj) => {
+                  itembolao['criador'] = obj.data();
                   this.meusboloes.push(itembolao);
+                })
+                 // this.meusboloes.push(itembolao);
                 }
               }
             }
@@ -61,11 +66,12 @@ export class ListaBolaoPage {
     this.navCtrl.push(TabsbolaoPage.name, { bolaoSelecionando: bolao });
   }
 
-  ionViewDidEnter() {
+  ionViewDidLoad() {
     if (this.authservice.authState == null) {
       this.navCtrl.setRoot(LoginPage)
     } else {
       this.carregarBoloes();
+      console.log('auth state', this.authservice.authState)
     }
   }
 

@@ -2,10 +2,10 @@
   <form (submit)="palpitar()" [formGroup]="palpiteForm">
     <ion-list>
       <ion-list-header>Palpite</ion-list-header>
-      <h3>*Escolha aqui a data em que bebê irá nascer.</h3>
+      <h3>*Selecione aqui a data do seu palpite :D</h3>
       <ion-item style="padding-left: 0px;">
         <ion-label stacked>Data Nascimento:</ion-label>
-        <ion-datetime [(ngModel)]="data" name="data" displayFormat="DD/MM/YYYY" formControlName="dataPalpite" [disabled]="bolao.dataNascimento != null"></ion-datetime>
+        <ion-datetime [(ngModel)]="data" name="data" displayFormat="DD/MM/YYYY" max="2050-12-31" formControlName="dataPalpite" [disabled]="bolao.dataNascimento != null"></ion-datetime>
       </ion-item>
     </ion-list>
     <ion-fab class="btn-fab-estilo">
