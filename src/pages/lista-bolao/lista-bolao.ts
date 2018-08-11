@@ -20,6 +20,7 @@ import { LoginPage } from '../login/login';
 })
 export class ListaBolaoPage {
   public meusboloes;
+  loader: any;
 
   constructor(public navCtrl: NavController,
     public loadingCtrl: LoadingController,
@@ -28,6 +29,7 @@ export class ListaBolaoPage {
     public authservice: AuthServiceProvider,
     public fireservice: FirestoreServiceProvider) {
   }
+
 
   criarBolao() {
     this.navCtrl.push(CriarBolaoPage.name);
@@ -60,6 +62,7 @@ export class ListaBolaoPage {
             console.log('dados do meusboloes', this.meusboloes);
           });
       });
+      console.log('dados do meusboloes2', this.meusboloes);
   }
 
   selecionaBolao(bolao) {
@@ -70,12 +73,19 @@ export class ListaBolaoPage {
     if (this.authservice.authState == null) {
       this.navCtrl.setRoot(LoginPage)
     } else {
+      this.presentLoading();
       this.carregarBoloes();
+      this.closingLoading();
       console.log('auth state', this.authservice.authState)
     }
   }
 
-
+  get UsuarioLogado() {
+    if(this.authservice.authState != null){
+      return this.authservice.currentUser;
+    }
+     
+  }
 
   sair() {
     this.authservice.signOut()
@@ -85,21 +95,24 @@ export class ListaBolaoPage {
       );
   }
 
-  presentLoading(message) {
-    const loading = this.loadingCtrl.create({
-      duration: 500
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Carregando..."
     });
+    this.loader.present();
+  }
 
-    loading.onDidDismiss(() => {
+  closingLoading() {
+    this.loader.dismiss();
+  }
+  
+  presentAlert(message) {
       const alert = this.alertCtrl.create({
         title: 'Alerta',
         subTitle: message,
         buttons: ['Fechar']
       });
       alert.present();
-    });
-
-    loading.present();
   }
 
 }

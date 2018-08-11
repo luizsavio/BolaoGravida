@@ -110,7 +110,7 @@ export class FirestoreServiceProvider {
 
   receberVariosDocumentosFiltrado(colecao: string, campoDocumento: string, condicao: string, valor: string): any{
     this.colecaoLista = new Array();
-    return new Promise((resolve, reject) =>{
+    return new Promise((resolve, reject) => {
       db.collection(colecao).where(campoDocumento, condicao, valor)
       .get()
       .then((querySnapshot) => {

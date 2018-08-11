@@ -22,6 +22,7 @@ export class BolaoEditarPage {
   public data;
   public editarForm: FormGroup;
   public bolao: any;
+  loader: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -43,6 +44,7 @@ export class BolaoEditarPage {
 
   salvar() {
     let data = this.editarForm.value;
+    this.presentLoading();
     let lista = new Array();
 
     for (let itemparticipante of this.bolao.bolaoparticipantes.participantes) {
@@ -56,69 +58,76 @@ export class BolaoEditarPage {
     let n = Number.MAX_VALUE;
     let objetoMenor;
     for (let i = 0; i < lista.length; i++) {
-      if (lista[i].dias < n)
-      {
-          n = lista[i].dias;
-          objetoMenor = lista[i];
-      } 
+      if (lista[i].dias < n) {
+        n = lista[i].dias;
+        objetoMenor = lista[i];
+      }
     }
     console.log('dias', lista);
     console.log('objeto menor', objetoMenor);
-    if(data.dataNascimento != null){
+    if (data.dataNascimento != null) {
       this.firestoreService.receberUmDocumento('usuario', objetoMenor.idUsuario).
-      then((doc) => {
-        let obj = doc.data();
-        let objEditado = {
-          dataNascimento: data.dataNascimento,
-          ganhadorProximo: { 
-            dataPalpite: objetoMenor.dataPalpite, 
-            dias: objetoMenor.dias, 
-            idUsuario: objetoMenor.idUsuario, 
-            nomeUsuario: obj.nomeUsuario}
-        }
-        this.firestoreService.atualizarDocumento('bolao', this.bolao.idBolao, objEditado)
-        .then(() => {
-          this.bolao.dataNascimento = objEditado.dataNascimento;
-          this.bolao.ganhadorProximo = objEditado.ganhadorProximo;
-          console.log('verificar se ta ok: ', this.bolao);
-          this.presentLoading('Bolão '+ this.bolao.nomeGravida+ ' finalizado com sucesso! Verifique a aba de informações e verifique quem teve mais sorte :D');
-        },
-      (error) => console.log(error));
-      });
-    } else{
+        then((doc) => {
+          let obj = doc.data();
+          let objEditado = {
+            dataNascimento: data.dataNascimento,
+            ganhadorProximo: {
+              dataPalpite: objetoMenor.dataPalpite,
+              dias: objetoMenor.dias,
+              idUsuario: objetoMenor.idUsuario,
+              nomeUsuario: obj.nomeUsuario
+            }
+          }
+          this.firestoreService.atualizarDocumento('bolao', this.bolao.idBolao, objEditado)
+            .then(() => {
+              this.bolao.dataNascimento = objEditado.dataNascimento;
+              this.bolao.ganhadorProximo = objEditado.ganhadorProximo;
+              console.log('verificar se ta ok: ', this.bolao);
+              this.closingLoading();
+              this.presentAlert('Bolão ' + this.bolao.nomeGravida + ' finalizado com sucesso! Verifique a aba de informações e verifique quem teve mais sorte :D');
+            },
+              (error) => {
+                this.closingLoading();
+                this.presentAlert(error);
+              });
+        });
+    } else {
       let objEditado = {
         nomeGravida: data.nomeGravida
       }
       this.firestoreService.atualizarDocumento('bolao', this.bolao.idBolao, objEditado)
         .then(() => {
           this.bolao.nomeGravida = objEditado.nomeGravida;
+          this.closingLoading();
           console.log('só sucesso');
         },
-      (error) => console.log(error));
-    } 
+        (error) => {
+          this.closingLoading();
+          this.presentAlert(error);
+        });
+    }
   }
 
-  presentLoading(message) {
-    const loading = this.loadingCtrl.create({
-      duration: 200
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Salvando..."
     });
+    this.loader.present();
+  }
 
-    loading.onDidDismiss(() => {
-      const alert = this.alertCtrl.create({
-        title: 'Alerta',
-        subTitle: message,
-        buttons: [{
-          text: 'Fechar'
+  closingLoading() {
+    this.loader.dismiss();
+  }
+
+  presentAlert(message) {
+    const alert = this.alertCtrl.create({
+      title: 'Alerta',
+      subTitle: message,
+      buttons: [{
+        text: 'Fechar'
       }
-    ]
-      });
-      alert.present();
+      ]
     });
-
-    loading.present();
+    alert.present();
   }
-
-  ionViewDidLoad() {
-  }
-
 }

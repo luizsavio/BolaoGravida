@@ -19,13 +19,14 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'login.html',
 })
 export class LoginPage {
-  
-  
+
+
   public backgroundImage = 'assets/img/background/background-10.jpg';
   loginForm: FormGroup;
   formSignup: FormGroup;
   formReset: FormGroup;
   usuario: any;
+  public loader;
 
   constructor(
     public loadingCtrl: LoadingController,
@@ -54,35 +55,38 @@ export class LoginPage {
     });
     console.log('carregando o login', authService.currentUser);
 
-    
-    
+
+
   }
- 
+
   // Slider methods
   @ViewChild('slider') slider: Slides;
   @ViewChild('innerSlider') innerSlider: Slides;
 
   login() {
     let data = this.loginForm.value;
-
+    this.presentLoading();
     if (!data.email) {
       return;
     }
     this.authService.signInWithEmailAndPassword(data.email, data.password)
-    .then((data) => {
-      console.log('Dados usuario Login login', data);
-      this.navCtrl.setRoot(ListaBolaoPage.name);
-      
-    },
-    (error) => this.presentLoading(error.message)
-    ); 
+      .then((data) => {
+        console.log('Dados usuario Login login', data);
+        this.closingLoading();
+        this.navCtrl.setRoot(ListaBolaoPage.name);
+
+      },
+        (error) => {
+          this.closingLoading();
+          this.presentAlert(error.message)
+        });
   }
 
   ionViewDidEnter() {
     this.storage.get("firebase:authUser:AIzaSyDaab2ETWq1XDiDyQkFZp-wk_T7BDGHUPw:[DEFAULT]")
       .then((resultado) => {
         console.log('promise', resultado)
-        if (resultado != null){
+        if (resultado != null) {
           this.authService.authState = resultado.value;
           this.navCtrl.setRoot(ListaBolaoPage.name);
         }
@@ -91,70 +95,95 @@ export class LoginPage {
 
   signUp() {
     let data = this.formSignup.value;
-
+    this.presentLoading();
     /*console.log("Senha:", data.passwordSignUp);
     console.log("Senha Confirmação:", data.passwordSignUpConfirm);*/
     if (!data.emailSignUp) {
+      this.closingLoading();
       return;
     }
     if (data.passwordSignUp != data.passwordSignUpConfirm) {
-      this.presentLoading('As senhas inseridas não conferem!');
+      this.closingLoading();
+      this.presentAlert('As senhas inseridas não conferem!');
       return;
     }
 
-    this.authService.createUserWithEmailAndPassword(data.nameSignUp ,data.emailSignUp, data.passwordSignUp)
+    this.authService.createUserWithEmailAndPassword(data.nameSignUp, data.emailSignUp, data.passwordSignUp)
       .then((user) => {
-         this.usuario = {
+        this.usuario = {
           uid: user.uid,
           nomeUsuario: data.nameSignUp,
           email: user.email,
           photoUrl: 'assets/img/avatar-padrao.jpg'
         }
-        
-        this.firestoreService.gravarDadosSemGerarIdAutomatico('usuario', user.uid, this.usuario);
-        this.presentLoading('Usuário cadastrado com sucesso!');
-        this.slider.slideTo(1);
+
+        this.firestoreService.gravarDadosSemGerarIdAutomatico('usuario', user.uid, this.usuario)
+          .then(() => {
+            this.authService.signInWithEmailAndPassword(data.emailSignUp, data.passwordSignUp)
+              .then((data) => {
+                console.log('Dados usuario Login login', data);
+                this.closingLoading();
+                this.navCtrl.setRoot(ListaBolaoPage.name);
+                this.presentAlert('Seja bem vindo!');
+              },
+                (error) => {
+                  this.closingLoading();
+                  this.presentAlert(error.message)
+                });
+          })
       },
         (error) => {
-          this.presentLoading(error.message);
+          this.closingLoading();
+          this.presentAlert(error.message);
           return;
         });
   }
 
   resetPassword() {
     let data = this.formReset.value;
-
+    this.presentLoading();
     if (!data.emailReset) {
+      this.closingLoading();
       return;
     }
 
     this.authService.resetPasswordEmail(data.emailReset)
-    .then(
-      () => this.presentLoading('Redefinição de senha encaminhado para o email!'),
-      (error) => this.presentLoading(error))
+      .then(
+        () => {
+          this.closingLoading();
+          this.presentAlert('Foi encaminhado uma nova senha para o seu email!')
+        },
+        (error) => {
+          this.closingLoading();
+          this.presentAlert(error)
+        })
   }
-//verificar se vai funcionar
+  //verificar se vai funcionar
   signGoogle() {
+    this.presentLoading();
     this.authService.signInWithGoogle()
-    .then(
-      (user) => {
-        this.firestoreService.receberUmDocumento('usuario', user.uid).
-        then((resultado) => {
-          if (resultado == false){
-            this.usuario = {
-              uid: user.uid,
-              nomeUsuario: user.displayName,
-              email: user.email,
-              photoUrl: user.photoURL
-            }
-            this.firestoreService.gravarDadosSemGerarIdAutomatico('usuario', user.uid, this.usuario);
-          } 
+      .then(
+        (user) => {
+          this.firestoreService.receberUmDocumento('usuario', user.uid).
+            then((resultado) => {
+              if (resultado == false) {
+                this.usuario = {
+                  uid: user.uid,
+                  nomeUsuario: user.displayName,
+                  email: user.email,
+                  photoUrl: user.photoURL
+                }
+                this.firestoreService.gravarDadosSemGerarIdAutomatico('usuario', user.uid, this.usuario);
+              }
+            });
+          console.log("Dados usuario Google login", user);
+          this.navCtrl.setRoot(ListaBolaoPage.name);
+          this.closingLoading();
+        },
+        (error) => {
+          this.closingLoading();
+          this.presentAlert(error);
         });
-        console.log("Dados usuario Google login", user);
-        this.navCtrl.setRoot(ListaBolaoPage.name);
-      },
-      error => console.log(error.message)
-    );
   }
 
   goToLogin() {
@@ -173,22 +202,23 @@ export class LoginPage {
     this.innerSlider.slidePrev();
   }
 
-  presentLoading(message) {
-    const loading = this.loadingCtrl.create({
-      duration: 500
+  presentAlert(message) {
+    const alert = this.alertCtrl.create({
+      title: 'Alerta',
+      subTitle: message,
+      buttons: ['Fechar']
     });
-
-    loading.onDidDismiss(() => {
-      const alert = this.alertCtrl.create({
-        title: 'Alerta',
-        subTitle: message,
-        buttons: ['Fechar']
-      });
-      alert.present();
-    });
-
-    loading.present();
+    alert.present();
   }
 
-  
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Carregando..."
+    });
+    this.loader.present();
+  }
+
+  closingLoading() {
+    this.loader.dismiss();
+  }
 }

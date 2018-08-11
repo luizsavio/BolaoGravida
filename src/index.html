@@ -11,6 +11,10 @@
   <link rel="icon" type="image/x-icon" href="assets/icon/icogravida.ico">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4e8ef7">
+  <!-- Falta tratar quando um bolão ninguém da nenhum palpite -> verificar e quando for fechar retornar a mensagem que não houve nehum palpite
+  Falta verificar também para tratar quando criar não deixa uma data prevista antes do dia atual e nem dentro do intervalo dos 15 dias -> tratar retornando uma mensagem de aviso
+  criar uma lista de ranking ao finalizar  o bolão com os mais proximos do acerto -> pode ser na aba de informação mesmo
+  -->
 
   <!-- add to homescreen for ios -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -58,7 +62,7 @@
     var auth = firebase.auth();
     var db = firebase.firestore();
     var firebase = firebase;
-    var messaging = firebase.messaging();
+    /*var messaging = firebase.messaging();
     messaging.usePublicVapidKey("BCXoOuNVWB57xYpaqpF33qelig_6SpRT37ZZmrXZjc9eDQY7Y6xVkspkm5tAPPivryJ2zPnwSFSd-4JL3c-6ZwM");
 
     // pedindo permissão ao usuario para notificação
@@ -104,7 +108,7 @@
         console.log('Unable to retrieve refreshed token ', err);
         showToken('Unable to retrieve refreshed token ', err);
       });
-    });
+    });*/
   </script>
   <!-- The polyfills js is generated during the build process -->
   <script src="build/polyfills.js"></script>

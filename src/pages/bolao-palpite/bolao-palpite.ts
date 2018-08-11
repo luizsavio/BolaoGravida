@@ -21,6 +21,7 @@ export class BolaoPalpitePage {
   public palpiteForm: FormGroup;
   public bolao: any;
   public dataAtual = new Date().toISOString();
+  loader: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -41,42 +42,50 @@ export class BolaoPalpitePage {
   }
   palpitar() {
     let data = this.palpiteForm.value;
+    this.presentLoading();
     console.log(this.dataAtual)
     console.log(this.bolao.dataLimiteAposta)
-    if(this.dataAtual < this.bolao.dataLimiteAposta){
+    if (this.dataAtual < this.bolao.dataLimiteAposta) {
       let lista = new Array();
-        lista = this.bolao.bolaoparticipantes.participantes;
-        for (let item of lista) {
-          if(item.idUsuario == this.authService.currentUser.uid){
-            item.dataPalpite = data.dataPalpite;
-            console.log('item: ', item);
-          }
+      lista = this.bolao.bolaoparticipantes.participantes;
+      for (let item of lista) {
+        if (item.idUsuario == this.authService.currentUser.uid) {
+          item.dataPalpite = data.dataPalpite;
+          console.log('item: ', item);
         }
-        this.bolao.bolaoparticipantes.participantes = lista;
-        this.firestoreService.atualizarDocumento('bolaoparticipantes', this.bolao.bolaoparticipantes.idBolao, {participantes: lista})
-        .then(() => this.presentLoading('Palpite salvo!'));
+      }
+      this.bolao.bolaoparticipantes.participantes = lista;
+      this.firestoreService.atualizarDocumento('bolaoparticipantes', this.bolao.bolaoparticipantes.idBolao, { participantes: lista })
+        .then(() => {
+          this.closingLoading();
+          this.presentAlert('Palpite salvo!')
+        });
     }
-    else{
-      this.presentLoading('Infelizmente você passou da data limite de aposta. :/')
+    else {
+      this.closingLoading();
+      this.presentAlert('Infelizmente você passou da data limite de aposta. :/')
     }
   }
- presentLoading(message) {
-    const loading = this.loadingCtrl.create({
-      duration: 200
-    });
 
-    loading.onDidDismiss(() => {
-      const alert = this.alertCtrl.create({
-        title: 'Alerta',
-        subTitle: message,
-        buttons: [{
-          text: 'Fechar'
-      }
-    ]
-      });
-      alert.present();
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Salvando..."
     });
+    this.loader.present();
+  }
 
-    loading.present();
+  closingLoading() {
+    this.loader.dismiss();
+  }
+
+  presentAlert(message) {
+    const alert = this.alertCtrl.create({
+      title: 'Alerta',
+      subTitle: message,
+      buttons: [{
+        text: 'Fechar'
+      }]
+    });
+    alert.present();
   }
 }

@@ -13,14 +13,7 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-
 <ion-content>
-    <!--<ion-list>
-        <ion-item *ngFor="let bolao of meusboloes" (click)="selecionaBolao(bolao)">
-          <h2>Bolão: {{ bolao.nomeGravida }} </h2>
-          <p> Data: {{ bolao.dataCriacao }} </p>
-        </ion-item>
-      </ion-list> -->
       <ion-list>
           <ion-list-header>Grávidas</ion-list-header>
         <ion-item *ngFor="let bolao of meusboloes" (click)="selecionaBolao(bolao)">
@@ -31,13 +24,23 @@
             <img [src]= bolao.photoURL>
           </ion-avatar>
           <h2>{{ bolao.nomeGravida }}</h2>
-          <p>Status: {{ bolao.dataNascimento ? 'Finalizado' : 'Em andamento' }}</p>
-          <p>Criado por: {{ bolao.criador.nomeUsuario }}</p>
+          <p [ngStyle]="{ 'color': bolao.dataNascimento === null ? 'green' : 'red' }"> Status: {{ bolao.dataNascimento ? 'Finalizado' : 'Em andamento' }}</p>
+          <p style="color:rgb(46, 44, 44)">Criado por: {{ bolao.criador.nomeUsuario }}</p>
           <!-- implementar uma condiçao de usuario logado com o que ta gravado em participantes e adicionar no meusboloes: array participando  -->
           <ion-badge color="secondary" item-end *ngIf="bolao.participando">Participando</ion-badge>
         </ion-item>
       </ion-list>
-      <ion-fab right bottom style="margin-right: 1%; margin-bottom: 1%">
+      <ion-fab 
+      middle
+      class="btn-fab-estilo"
+      *ngIf="meusboloes == 0"> 
+        <p>Nenhum bolão cadastrado!</p>
+      </ion-fab>
+      <ion-fab 
+      right 
+      bottom 
+      style="margin-right: 1%; margin-bottom: 1%"
+      *ngIf="UsuarioLogado?.uid == 'l6jl4ij2xrdnC80Q7oSY1JCeQMG2' || UsuarioLogado?.uid == 'UwZ4TO9vMJaaj69E4PYKHP4mAbG3'">
         <button ion-fab color="danger" (click)="criarBolao()"><ion-icon name="add"></ion-icon></button>
       </ion-fab>
 </ion-content>

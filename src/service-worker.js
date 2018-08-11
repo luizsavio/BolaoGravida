@@ -19,20 +19,20 @@ self.toolbox.precache(
     './build/vendor.js',
     './build/main.css',
     './build/polyfills.js',
-    'index.html',
+    //'index.html',
     'manifest.json'
   ]
 );
 
 // dynamically cache any other local assets
-//self.toolbox.router.any('/*', self.toolbox.fastest);
+self.toolbox.router.any('/*', self.toolbox.fastest);
 
 // for any other requests go to the network, cache,
 // and then only use that cached resource if your user goes offline
 self.toolbox.router.default = self.toolbox.networkFirst;
 
 
-self.addEventListener('push', function (event) {
+/*elf.addEventListener('push', function (event) {
   console.log('Received a push message', event);
 
   let txtNot = event.data.json().notification;
@@ -93,4 +93,4 @@ self.addEventListener('fetch', event => {
       // If we didn't find a match in the cache, use the network.
       return fetch(event.request);
   }());
-});
+});*/

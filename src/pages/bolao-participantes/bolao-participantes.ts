@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { FirestoreServiceProvider } from '../../providers/firestore-service/firestore-service';
 
 @IonicPage()
@@ -10,32 +10,43 @@ import { FirestoreServiceProvider } from '../../providers/firestore-service/fire
 export class BolaoParticipantesPage {
 
   public bolao;
-  public listaParticipantes = Array();
+  public listaParticipantes;
+  loader: any;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public loadingCtrl: LoadingController,
     public firestoreService: FirestoreServiceProvider) {
     this.bolao = navParams.data;
+    this.listaParticipantes = new Array();
     console.log('o que veio do volao pgparticipantes:', this.bolao);
   }
 
-  ionViewDidEnter(){
+  ionViewDidEnter() {
+    this.presentLoading();
     this.carregarParticipantes();
+    this.closingLoading();
   }
 
   carregarParticipantes() {
-    this.listaParticipantes = new Array();
     for (const item of this.bolao.bolaoparticipantes.participantes) {
-      this.firestoreService.receberVariosDocumentosFiltrado('usuario', 'uid', '==', item.idUsuario)
-        .then((lista) => {
-          this.listaParticipantes = lista;
-          //console.log('lista apenas:', lista);
-          /*for (const itemArray of lista) {
-            this.listaParticipantes.push(itemArray);
-          }*/
-          //console.log('lista de usuario:', this.listaParticipantes);
-        });
+      this.firestoreService.receberUmDocumento('usuario', item.idUsuario)
+        .then((obj) => {
+          let objeto = obj.data();
+          objeto['dataPalpite'] = item.dataPalpite;
+          this.listaParticipantes.push(objeto)
+        })
     }
+    console.log('particpantes', this.listaParticipantes);
+  }
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Carregando..."
+    });
+    this.loader.present();
   }
 
+  closingLoading() {
+    this.loader.dismiss();
+  }
 }

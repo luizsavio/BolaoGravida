@@ -23,6 +23,7 @@ export class CriarBolaoPage {
   public dataLimiteAposta: any;
   public dataCriacao: string = new Date().toISOString();
   public bolao: object;
+  loader: any;
   
 
   constructor(public navCtrl: NavController,
@@ -46,6 +47,7 @@ export class CriarBolaoPage {
 
   criar() {
     let data = this.criarForm.value;
+    this.presentLoading();
     var dataAux = new Date(data.dataPrevista);
     var dataLimite = dataAux;
     dataLimite.setDate(dataAux.getDate() - 15);
@@ -76,29 +78,37 @@ export class CriarBolaoPage {
             })
               .then(() => {
                 console.log('bolaoparticipantes adicionado com sucesso.');
-                this.presentLoading('Bolão criado com sucesso!');
+                this.closingLoading();
+                this.presentAlert('Bolão criado com sucesso!');
                 this.navCtrl.setRoot(ListaBolaoPage.name);
                 return;
               },
                 () => {
-                  console.log('bolaoparticipantes adicionado com sucesso.');
-                  this.presentLoading('*AttBP: Ocorreu um erro. Tente novamente mais tarde!');
+                  this.closingLoading();
+                  this.presentAlert('*AttBP: Ocorreu um erro. Tente novamente mais tarde!');
                 });
             console.log('id do bolao alterado com sucesso');
           },
-            () => this.presentLoading('*Att: Ocorreu um erro. Tente novamente mais tarde!'));
+            () => this.presentAlert('*Att: Ocorreu um erro. Tente novamente mais tarde!'));
       },
         (error) => {
-          this.presentLoading('Ocorreu um erro. Tente novamente mais tarde!');
+          this.closingLoading();
+          this.presentAlert('Ocorreu um erro. Tente novamente mais tarde!');
         });
   }
 
-  presentLoading(message) {
-    const loading = this.loadingCtrl.create({
-      duration: 500
+  presentLoading() {
+    this.loader = this.loadingCtrl.create({
+      content: "Carregando..."
     });
+    this.loader.present();
+  }
 
-    loading.onDidDismiss(() => {
+  closingLoading() {
+    this.loader.dismiss();
+  }
+
+  presentAlert(message) {
       const alert = this.alertCtrl.create({
         title: 'Alerta',
         subTitle: message,
@@ -107,9 +117,5 @@ export class CriarBolaoPage {
       }]
       });
       alert.present();
-    });
-
-    loading.present();
   }
-
 }
