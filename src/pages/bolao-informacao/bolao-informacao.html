@@ -10,7 +10,7 @@
                 <p>Data do meu palpite: {{ !meupalpite ? 'Você ainda não fez nenhum palpite' : meupalpite | date: 'dd/MM/yyyy' }}</p>
                 <p>Data criação: {{ bolao.dataCriacao  | date: 'dd/MM/yyyy' }}</p>
                 <p [ngStyle]="{ 'color': bolao.dataNascimento === null ? 'green' : 'red' }">Status: {{ bolao.dataNascimento ? 'Finalizado' : 'Em aberto' }}</p>
-                <p [ngStyle]="{ 'color': bolao.ganhadorProximo.nomeUsuario ? 'green' : '' }">Participante melhor palpite: {{ bolao.ganhadorProximo.nomeUsuario ? bolao.ganhadorProximo.nomeUsuario : 'Bolão não foi finalizado ainda!' }}</p>
+                <p [ngStyle]="{ 'color': bolao.ganhadorProximo?.nomeUsuario ? 'green' : '' }">Participante melhor palpite: {{ bolao.ganhadorProximo?.nomeUsuario ? bolao.ganhadorProximo.nomeUsuario : 'Bolão não foi finalizado ainda!' }}</p>
                 <ion-fab *ngIf="bolao.dataNascimento == null && !bolao.participando" (mousedown)="0" class="btn-fab-estilo">
                         <button ion-button color="primary" block (click)="participar()">
                                 Participar

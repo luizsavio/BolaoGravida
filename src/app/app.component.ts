@@ -21,8 +21,8 @@ export class MyApp {
   
 
   public paginas = [
-    { titulo: 'Bolões', component: ListaBolaoPage, icone: 'woman', desabilitado: false },
-    { titulo: 'Perfil', component: PerfilPage, icone: 'person', desabilitado: false },
+    { titulo: 'Bolões', component: ListaBolaoPage.name, icone: 'woman', desabilitado: false },
+    { titulo: 'Perfil', component: PerfilPage.name, icone: 'person', desabilitado: false }, 
     //{ titulo: 'Criar Bolão', component: CriarBolaoPage.name, icone: 'add', desabilitado: this.podeCriar },
   ];
   
@@ -51,7 +51,7 @@ export class MyApp {
   }
 
   irParaPagina(component) {
-    this.nav.push(component.name);
+    this.nav.push(component);
   }
 
   criabolao(){

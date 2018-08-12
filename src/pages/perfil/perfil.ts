@@ -38,7 +38,7 @@ export class PerfilPage {
 
   }
 
-  ionViewDidEnter() {
+  ionViewDidLoad() {
     if (this.authService.authState == null) {
       this.navCtrl.setRoot(LoginPage)
     }

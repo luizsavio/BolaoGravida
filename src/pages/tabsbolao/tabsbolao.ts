@@ -6,6 +6,7 @@ import { BolaoPalpitePage } from '../bolao-palpite/bolao-palpite';
 import { BolaoEditarPage } from '../bolao-editar/bolao-editar';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 import { LoginPage } from '../login/login';
+import { ListaBolaoPage } from '../lista-bolao/lista-bolao';
 
 /**
  * Generated class for the TabsbolaoPage page.
@@ -37,13 +38,15 @@ export class TabsbolaoPage {
       this.tab4 = BolaoEditarPage;
       this.bolao = navParams.get('bolaoSelecionando');
       console.log('bolao selecionado tab', this.bolao);
-      (authService.currentUser.uid == this.bolao.idUsuarioBolaoCriado) ? this.criador = true : this.criador = false
+      if(this.bolao != null){
+        (authService.currentUser.uid == this.bolao.idUsuarioBolaoCriado) ? this.criador = true : this.criador = false
+      }
     }
   }
 
-  /*ionViewDidEnter() {
-    if (this.authService.authState == null) {
-      this.navCtrl.setRoot(LoginPage);
+  ionViewDidload() {
+    if (this.bolao == null) {
+      this.navCtrl.setRoot(ListaBolaoPage.name);
     }
-  }*/
+  }
 }
